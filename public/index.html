@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset='utf-8'>
+	<meta name='viewport' content='width=device-width,initial-scale=1'>
+
+	<title>Svelte app</title>
+
+	<link rel='icon' type='image/png' href='/favicon.png'>
+	<link rel='stylesheet' href='/global.css'>
+	<link rel='stylesheet' href='/build/bundle.css'>
+
+	<script defer src='/build/bundle.js'></script>
+	<style>
+		#test-container-1
+		{
+			width:25rem;
+		}
+	</style>
+</head>
+
+<body>
+	<section>
+		<h2>Simple usage</h2>
+		<pre lang="js">
+	const { Pictune } = window.PictuneLib
+	const container = document.querySelector('#test-container-1')
+	const app1 = new Pictune({
+		target: container,
+		props: {
+			enabledProps: [],
+			applyToSelector: '#pictune-image-1'
+		}
+	})
+		</pre>
+		<img style="display: block;" id="pictune-image-1" src="mandrill.png" alt="mandril">
+		<div id="test-container-1"></div>
+	</section>
+	
+	<hr>
+
+	<section>
+		<h2>Single knob</h2>
+		<pre lang="js">
+	const { PictuneSingle } = window.PictuneLib
+	const container = document.querySelector('#test-container-2')
+	const app1 = new PictuneSingle({
+		target: container,
+		props: {
+			paramName: 'contrast', // defaults to brightntess
+			applyToSelector: '#pictune-image-2'
+		}
+	})
+		</pre>
+		<img style="display: block;" id="pictune-image-2" src="mandrill.png" alt="mandril">
+		<div id="test-container-2"></div>
+	</section>
+
+	<hr>
+
+	<section>
+		<h2>Auto pick up existing params</h2>
+
+		<img style="display: block;" id="pictune-image-3" src="mandrill.png" alt="mandril">
+		<button name="show-hide-ctrl" id="show-hide-ctrl">click me</button>
+		<div id="test-container-3">
+			test item
+		</div>
+	</section>
+
+</body>
+
+<script>
+	const retry = async (cb, timeout) => {
+		while (!(await cb())) {
+			await new Promise(rs => setTimeout(rs, timeout))
+		}
+	}
+
+	const run1 = () => {
+		const { Pictune } = window.PictuneLib
+		const container = document.querySelector('#test-container-1')
+		const app1 = new Pictune({
+			target: container,
+			props: {
+				enabledProps: [],
+				applyToSelector: '#pictune-image-1'
+			}
+		})
+	}
+
+	const run2 = () => {
+
+		const { PictuneSingle } = window.PictuneLib
+		const container = document.querySelector('#test-container-2')
+		const app1 = new PictuneSingle({
+			target: container,
+			props: {
+				paramName: 'contrast', // defaults to brightntess
+				applyToSelector: '#pictune-image-2'
+			}
+		})
+	}
+
+	let app1
+	const run3 = () => {
+		const btnToggle = document.querySelector('#show-hide-ctrl')
+		const container = document.querySelector('#test-container-3')
+		let isOn = false
+		let isEvil = false
+		btnToggle.addEventListener('click', () => {
+			// if (isEvil) {
+			// 	let counter = 10000
+			// 	while (counter > 0) {
+			// 		const { Pictune } = window.PictuneLib
+			// 		const app1 = new Pictune({
+			// 			target: container,
+			// 			props: {
+			// 				enabledProps: [],
+			// 				applyToSelector: '#pictune-image-3'
+			// 			}
+			// 		})
+			// 		app1.$destroy()
+			// 		while (container.lastChild) {
+			// 			container.removeChild(container.lastChild)
+			// 		}
+			// 		counter --
+			// 	}
+			// 	return
+			// }
+			if (isOn) {
+				console.log('removing')
+				container.parentNode.removeChild(container)
+				// while (container.lastChild) {
+				// 	container.removeChild(container.lastChild)
+				// }
+			} else {
+				console.log("adding")
+				const { Pictune } = window.PictuneLib
+				app1 = new Pictune({
+					target: container,
+					props: {
+						enabledProps: [],
+						applyToSelector: '#pictune-image-3'
+					}
+				})
+			}
+
+			isOn = !isOn
+		})
+
+	}
+
+	const runMain = async () => {
+		await retry(() => {
+			return !!window.PictuneLib
+		}, 160)
+		run1()
+		run2()
+		run3()
+	}
+
+	runMain()
+</script>
+</html>
