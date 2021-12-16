@@ -1,10 +1,11 @@
 {
-  "name": "pictune",
-  "version": "0.0.1",
+  "name": "picture-tune",
+  "version": "0.0.2",
   "description": "",
   "main": "index.js",
   "scripts": {
     "build": "rollup -c",
+    "build-prod": "rollup -c -o ./dist/index.js",
     "dev": "rollup -c -w",
     "start": "sirv public --no-clear"
   },
@@ -31,5 +32,8 @@
   "bugs": {
     "url": "https://github.com/xgui3783/pictune/issues"
   },
-  "homepage": "https://github.com/xgui3783/pictune#readme"
+  "homepage": "https://github.com/xgui3783/pictune#readme",
+  "files": [
+    "dist"
+  ]
 }
